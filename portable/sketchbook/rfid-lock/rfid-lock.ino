@@ -25,6 +25,7 @@ void lcd_access_denied();
 
 String read_tag();
 bool authenticate(String tag);
+void unlock_door();
 
 
 void setup() {
@@ -60,9 +61,8 @@ void loop() {
   if(authenticate(tag)){
     Serial.println("Authorized access");
     lcd_access_granted();
-    motor.write( 90 );
-    delay(2000);        //simulated delay, simillar to how you would lock your door after unlocking it and leaving
-    motor.write( 0 );
+    unlock_door();
+    
   } else {
     Serial.println("Access denied");
     lcd_access_denied();
@@ -186,3 +186,12 @@ String read_tag(){
   return tag;
 }
 
+
+/*  
+ * Unlocks the door, then relocks after a 2 second delay
+ */
+void unlock_door(){
+  motor.write( 90 );
+  delay(2000);        //simulated delay, simillar to how you would lock your door after unlocking it and leaving
+  motor.write( 0 );
+}
